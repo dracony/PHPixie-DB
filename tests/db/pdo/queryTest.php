@@ -158,7 +158,7 @@ class PDO_Query_Test extends PHPUnit_Framework_TestCase
 			->data(array(array('id' => 1, 'name' => 'Trixie'), array('id' => 2, 'name' => 'Tinkerbell')))
 			->query();
 
-		$this->assertEquals("INSERT INTO `fairies` (`id`, `name`) VALUES(?, ?), VALUES(?, ?)", current($query));
+		$this->assertEquals("INSERT INTO `fairies` (`id`, `name`) VALUES(?, ?), (?, ?)", current($query));
 	}
 
 	/**
