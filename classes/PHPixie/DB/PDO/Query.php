@@ -168,24 +168,76 @@ class Query extends \PHPixie\DB\Query
 			}
 			else
 			{
-				$columns = '';
-				$values = '';
-				$first = true;
-				foreach ($this->_data as $key => $val)
+				if(isset($this->_data[0]) && is_array($this->_data[0])) // Batch insert
 				{
-					if (!$first)
+					$first_row = true;
+					$columns_array = array();
+					foreach($this->_data as $row)
 					{
-						$values .= ', ';
-						$columns .= ', ';
+						$columns = '';
+						$values = '';
+						$first = true;
+						if($first_row)
+						{
+							foreach ($row as $key => $val)
+							{
+								if (!$first)
+								{
+									$values .= ', ';
+									$columns .= ', ';
+								}
+								else
+								{
+									$first = false;
+								}
+								$columns .= $this->quote($key);
+								$columns_array[] = $key;
+								$values .= $this->escape_value($val, $params);
+							}
+							$query .= "({$columns}) VALUES({$values})";
+						}
+						else
+						{
+							foreach ($columns_array as $col)
+							{
+								if (!$first)
+								{
+									$values .= ', ';
+								}
+								else
+								{
+									$first = false;
+								}	
+								$values .= $this->escape_value($row[$col], $params);
+							}
+							$query .= ", ({$values})";
+						}
+						$first_row = false;
 					}
-					else
-					{
-						$first = false;
-					}
-					$columns .= $this->quote($key);
-					$values .= $this->escape_value($val, $params);
+					
+					
 				}
-				$query .= "({$columns}) VALUES({$values})";
+				else
+				{
+					$columns = '';
+					$values = '';
+					$first = true;
+					foreach ($this->_data as $key => $val)
+					{
+						if (!$first)
+						{
+							$values .= ', ';
+							$columns .= ', ';
+						}
+						else
+						{
+							$first = false;
+						}
+						$columns .= $this->quote($key);
+						$values .= $this->escape_value($val, $params);
+					}
+					$query .= "({$columns}) VALUES({$values})";
+				}
 			}
 		}
 		else
