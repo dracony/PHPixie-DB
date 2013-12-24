@@ -145,6 +145,21 @@ class PDO_Query_Test extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals("INSERT INTO `fairies` (`id`, `name`) VALUES(?, ?)", current($query));
 	}
+	
+	/**
+	 * @covers Query_PDO_Driver::query
+	 * @todo   Implement testQuery().
+	 */
+	public function testQueryInsertBatch()
+	{
+		$query = $this->object
+			->type('insert')
+			->table('fairies')
+			->data(array(array('id' => 1, 'name' => 'Trixie'), array('id' => 2, 'name' => 'Tinkerbell')))
+			->query();
+
+		$this->assertEquals("INSERT INTO `fairies` (`id`, `name`) VALUES(?, ?), VALUES(?, ?)", current($query));
+	}
 
 	/**
 	 * @covers Query_PDO_Driver::query
