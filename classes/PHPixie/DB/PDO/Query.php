@@ -207,15 +207,15 @@ class Query extends \PHPixie\DB\Query
 								else
 								{
 									$first = false;
-								}	
+								}
 								$values .= $this->escape_value($row[$col], $params);
 							}
 							$query .= ", ({$values})";
 						}
 						$first_row = false;
 					}
-					
-					
+
+
 				}
 				else
 				{
@@ -237,6 +237,10 @@ class Query extends \PHPixie\DB\Query
 						$values .= $this->escape_value($val, $params);
 					}
 					$query .= "({$columns}) VALUES({$values})";
+					if ($this->_db_type == 'pgsql')
+					{
+						$query.= " RETURNING *";
+					}
 				}
 			}
 		}
@@ -306,28 +310,33 @@ class Query extends \PHPixie\DB\Query
 				if(!empty($join[2]))
 					$query.="ON {$this->get_condition_query($join[2], $params, true, true)} ";
 			}
-			
+
 			if ($this->_type == 'update') {
-			
+
 				$query.= "SET ";
 
 				$first = true;
 				foreach ($this->_data as $key => $val) {
-				
+
 					if (!$first){
 						$query.=", ";
 					}else{
 						$first = false;
 					}
-					
+
 					$query .= "{$this->quote($key)} = {$this->escape_value($val, $params)}";
 				}
 				$query .= " ";
 			}
-			
+
 			if (!empty($this->_conditions))
 			{
 				$query .= "WHERE {$this->get_condition_query($this->_conditions, $params, true)} ";
+			}
+
+			if ($this->_type == 'update' && $this->_db_type == 'pgsql')
+			{
+				$query.= " RETURNING *";
 			}
 			if (($this->_type == 'select' || $this->_type == 'count') && $this->_group_by != null)
 			{
