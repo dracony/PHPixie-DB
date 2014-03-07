@@ -132,7 +132,7 @@ class Query extends \PHPixie\DB\Query
 		{
 			$table = $this->quote($table);
 			if ($alias != null)
-				$table.= " AS {$alias}";
+				$table.= " AS {$this->quote($alias)}";
 			return $table;
 		}
 
@@ -140,10 +140,10 @@ class Query extends \PHPixie\DB\Query
 			$alias = $this->last_alias();
 
 		if ($table instanceof \PHPixie\DB\Query)
-			return "{$this->subquery($table, $params)} AS {$alias}";
+			return "{$this->subquery($table, $params)} AS {$this->quote($alias)}";
 
 		if ($table instanceof \PHPixie\DB\Expression)
-			return "({$table->value}) AS {$alias}";
+			return "({$table->value}) AS {$this->quote($alias)}";
 
 		throw new \Exception("Parameter type ".get_class($table)." cannot be used as a table");
 	}
@@ -264,7 +264,7 @@ class Query extends \PHPixie\DB\Query
 						}
 						if (is_array($f))
 						{
-							$query .= "{$this->escape_field($f[0])} AS {$f[1]} ";
+							$query .= "{$this->escape_field($f[0])} AS {$this->quote($f[1])} ";
 						}
 						else
 						{
