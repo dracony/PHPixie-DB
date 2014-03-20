@@ -158,9 +158,11 @@ class Query extends \PHPixie\DB\Query
 
 		$query = '';
 		$params = array();
+		$no_result = false;
 
 		if ($this->_type == 'insert')
 		{
+			$no_result = true;
 			$query .= "INSERT INTO {$this->escape_table($this->_table, $params)} ";
 			if (empty($this->_data) && $this->_db_type == 'pgsql')
 			{
@@ -240,6 +242,7 @@ class Query extends \PHPixie\DB\Query
 					if ($this->_db_type == 'pgsql')
 					{
 						$query.= " RETURNING *";
+						$no_result = false;
 					}
 				}
 			}
@@ -314,6 +317,7 @@ class Query extends \PHPixie\DB\Query
 			if ($this->_type == 'update') {
 
 				$query.= "SET ";
+				$no_result = true;
 
 				$first = true;
 				foreach ($this->_data as $key => $val) {
@@ -336,6 +340,7 @@ class Query extends \PHPixie\DB\Query
 
 			if ($this->_type == 'update' && $this->_db_type == 'pgsql')
 			{
+				$no_result = false;
 				$query.= " RETURNING *";
 			}
 			if (($this->_type == 'select' || $this->_type == 'count') && $this->_group_by != null)
@@ -404,7 +409,7 @@ class Query extends \PHPixie\DB\Query
 			}
 		}
 
-		return array($query, $params);
+		return array($query, $params, $no_result);
 	}
 
 	/**

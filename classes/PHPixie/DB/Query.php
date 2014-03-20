@@ -244,11 +244,12 @@ abstract class Query
 	{
 		$query = $this->query();
 		$result = $this->_db->execute($query[0], $query[1]);
+		$no_result = isset($query[2])?$query[2]:false;
 		if ($this->_type == 'count')
 		{
 			return $result->get('count');
 		}
-		return $result;
+		return $no_result?null:$result;
 	}
 
 	/**
@@ -399,7 +400,7 @@ abstract class Query
 
 	/**
 	 * Adds a UNION to the query
-	 * 
+	 *
 	 * @param  Query_Database|Expression_Database  $query Query for the UNION
 	 * @param  string $all whether to do a UNION ALL, e.g. keep duplicate rows
 	 * @return Query_Database  Returns self
@@ -408,7 +409,7 @@ abstract class Query
 		$this->_union[] = array($query,$all);
 		return $this;
 	}
-	
+
 	/**
 	 * Gets last generated alias
 	 *
