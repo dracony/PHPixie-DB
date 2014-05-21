@@ -56,7 +56,7 @@ class Query extends \PHPixie\DB\Query
 	 * @return string  Escaped field representation
 	 * @see \PHPixie\DB\Expression
 	 */
-	public function escape_field($field)
+	public function escape_field($field, $prepend_table = true)
 	{
 		if (is_object($field) && $field instanceof \PHPixie\DB\Expression)
 		{
@@ -65,6 +65,8 @@ class Query extends \PHPixie\DB\Query
 		$field = explode('.', $field);
 		if (count($field) == 1)
 		{
+			if(!$prepend_table)
+				return $this->quote($field[0]);
 			array_unshift($field, $this->last_alias());
 		}
 		$str = $this->quote($field[0]).'.';
@@ -331,7 +333,7 @@ class Query extends \PHPixie\DB\Query
 			}
 			if (($this->_type == 'select' || $this->_type == 'count') && $this->_group_by != null)
 			{
-				$query .= "GROUP BY {$this->escape_field($this->_group_by)} ";
+				$query .= "GROUP BY {$this->escape_field($this->_group_by, false)} ";
 			}
 			if (($this->_type == 'select' || $this->_type == 'count') && !empty($this->_having))
 			{
