@@ -12,8 +12,7 @@ class Result extends \PHPixie\DB\Result
 	/**
 	 * Initializes new result object
 	 *
-	 * @param mysqli_result $result Mysqli Result
-	 * @return void
+	 * @param \mysqli_result $result Mysqli Result
 	 * @link http://php.net/manual/en/class.mysqli-result.php
 	 */
 	public function __construct($result)

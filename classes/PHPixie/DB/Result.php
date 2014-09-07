@@ -108,6 +108,8 @@ abstract class Result implements \Iterator
 		{
 			return $this->_row->$column;
 		}
+
+        return null;
 	}
 	
 	/**

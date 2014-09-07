@@ -1,6 +1,7 @@
 <?php
 
 namespace PHPixie\DB;
+use PHPixie\DB;
 
 /**
  * Query builder. It allows building queries by using methods to set specific query parameters.
@@ -41,7 +42,7 @@ abstract class Query
 
 	/**
 	 * Table to query
-	 * @var unknown
+	 * @var mixed
 	 */
 	protected $_table;
 
@@ -53,7 +54,7 @@ abstract class Query
 
 	/**
 	 * Data for row insertion or update
-	 * @var unknown
+	 * @var mixed
 	 */
 	protected $_data;
 
@@ -89,7 +90,7 @@ abstract class Query
 
 	/**
 	 * Database connection
-	 * @var DB
+	 * @var Connection
 	 */
 	protected $_db;
 
@@ -129,13 +130,12 @@ abstract class Query
 	 */
 	public abstract function query();
 
-	/**
-	 * Creates a new query
-	 *
-	 * @param DB $db   Database connection
-	 * @param string $type Query type. Available types: select, update, insert, delete, count
-	 * @return void
-	 */
+    /**
+     * Creates a new query
+     *
+     * @param Connection $db Database connection
+     * @param string $type Query type. Available types: select, update, insert, delete, count
+     */
 	public function __construct($db, $type)
 	{
 		$this->_db = $db;
@@ -171,7 +171,7 @@ abstract class Query
 	/**
 	 * Sets the table to perform operations on, also supports subqueries
 	 *
-	 * @param string|Query_database|Expression_database $table table to select from
+	 * @param string|Query|Expression $table table to select from
 	 * @param string $alias Alias for this table
 	 * @return mixed Returns self if a table is passed, otherwise returns the table
 	 */
@@ -238,7 +238,7 @@ abstract class Query
 	/**
 	 * Executes the query
 	 *
-	 * @return object Executes current query on its database connection
+	 * @return Result|mixed Executes current query on its database connection
 	 * @see DB
 	 */
 	public function execute()
@@ -258,7 +258,7 @@ abstract class Query
 	 * @param string $table Table to join
 	 * @param array $conds Conditions to join tables on, same behavior as with where() method
 	 * @param string  $type  Type of join. Defaults to 'left'
-	 * @return Query_Database   Returns self
+	 * @return Query   Returns self
 	 * @see where()
 	 */
 	public function join($table, $conds, $type = 'left')
@@ -270,7 +270,7 @@ abstract class Query
 	/**
 	 * Sets conditions for aggregate functions, same behavior as with where() method
 	 *
-	 * @return Query_Database Returns self
+	 * @return Query Returns self
 	 * @see where()
 	 */
 	public function having()
@@ -286,7 +286,7 @@ abstract class Query
 	 *
 	 * @param string $column Column to order by
 	 * @param string $dir Ordering direction.
-	 * @return Query_Database  Returns self
+	 * @return Query  Returns self
 	 * @throws \Exception If ordering direction isn't DESC or ASC
 	 */
 	public function order_by($column, $dir = 'ASC')
@@ -334,7 +334,7 @@ abstract class Query
 	 * @param mixed $operator Condition value, operator or an array of parameters
 	 * @param mixed $val Condition value
 	 *
-	 * @return Query_Database  Returns self
+	 * @return Query  Returns self
 	 */
 	public function where()
 	{
@@ -398,13 +398,13 @@ abstract class Query
 		throw new \Exception('Incorrect conditional statement passed');
 	}
 
-	/**
-	 * Adds a UNION to the query
-	 * 
-	 * @param  Query_Database|Expression_Database  $query Query for the UNION
-	 * @param  string $all whether to do a UNION ALL, e.g. keep duplicate rows
-	 * @return Query_Database  Returns self
-	 */
+    /**
+     * Adds a UNION to the query
+     *
+     * @param  Query|Expression $query Query for the UNION
+     * @param bool|string $all whether to do a UNION ALL, e.g. keep duplicate rows
+     * @return Query  Returns self
+     */
 	public function union($query,$all=true) {
 		$this->_union[] = array($query,$all);
 		return $this;

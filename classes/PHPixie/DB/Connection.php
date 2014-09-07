@@ -10,9 +10,15 @@ namespace PHPixie\DB;
  */
 abstract class Connection
 {
-
+    /**
+     * @var \PHPixie\Pixie
+     */
 	public $pixie;
-	
+
+    /**
+     * @param \PHPixie\Pixie $pixie
+     * @param $config
+     */
 	public function __construct($pixie, $config) {
 		$this->pixie = $pixie;
 	}
@@ -22,7 +28,7 @@ abstract class Connection
 	 *
 	 * @param string   $query  A prepared statement query
 	 * @param array     $params Parameters for the query
-	 * @return Result_Database
+	 * @return Result
 	 * @see Result_Database
 	 */
 	public abstract function execute($query, $params = array());
@@ -31,8 +37,8 @@ abstract class Connection
 	 * Builds a new Query to the database
 	 *
 	 * @param string $type Query type. Available types: select, update, insert, delete, count
-	 * @return Result_Database
-	 * @see Query_Database
+	 * @return Query
+	 * @see Query
 	 */
 	public abstract function query($type);
 
@@ -60,7 +66,7 @@ abstract class Connection
 	 *
 	 * @param string $query  A named query
 	 * @param array   $params Associative array of parameters
-	 * @return Result_Database   Current drivers implementation of Result_Database
+	 * @return Result   Current drivers implementation of Result_Database
 	 */
 	public function named_query($query, $params = array())
 	{

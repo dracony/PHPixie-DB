@@ -1,6 +1,7 @@
 <?php
 
 namespace PHPixie\DB\PDO;
+use PHPixie\DB\Result;
 
 /**
  * PDO Database implementation.
@@ -13,7 +14,7 @@ class Connection extends \PHPixie\DB\Connection
 	
 	/**
 	 * Connection object
-	 * @var PDO
+	 * @var \PDO
 	 * @link http://php.net/manual/en/class.pdo.php
 	 */
 	public $conn;
@@ -24,12 +25,14 @@ class Connection extends \PHPixie\DB\Connection
 	 */
 	public $db_type;
 
-	/**
-	 * Initializes database connection
-	 *
-	 * @param string $config Name of the connection to initialize
-	 * @return void
-	 */
+    /**
+     * Initializes database connection
+     *
+     * @param \PHPixie\Pixie $pixie
+     * @param string $config Name of the connection to initialize
+     * @throws \Exception
+     * @return \PHPixie\DB\PDO\Connection
+     */
 	public function __construct($pixie, $config)
 	{
 		parent::__construct($pixie, $config);
@@ -51,7 +54,7 @@ class Connection extends \PHPixie\DB\Connection
 	 * Builds a new Query implementation
 	 *
 	 * @param string $type Query type. Available types: select,update,insert,delete,count
-	 * @return Query_PDO_Driver  Returns a PDO implementation of a Query.
+	 * @return Query  Returns a PDO implementation of a Query.
 	 * @see Query_Database
 	 */
 	public function query($type)
@@ -109,22 +112,22 @@ class Connection extends \PHPixie\DB\Connection
 		return $columns;
 	}
 
-	/**
-	 * Executes a prepared statement query
-	 *
-	 * @param string   $query  A prepared statement query
-	 * @param array     $params Parameters for the query
-	 * @return Result_PDO_Driver    PDO implementation of a database result
-	 * @throws \Exception If the query resulted in an error
-	 * @see Database_Result
-	 */
+    /**
+     * Executes a prepared statement query
+     *
+     * @param string $query A prepared statement query
+     * @param array $params Parameters for the query
+     * @throws \Exception
+     * @return Result    PDO implementation of a database result
+     * @see Database_Result
+     */
 	public function execute($query, $params = array())
 	{
 		$cursor = $this->conn->prepare($query);
 		if (!$cursor->execute($params))
 		{
 			$error = $cursor->errorInfo();
-			throw new Exception("Database error:\n".$error[2]." \n in query:\n{$query}");
+			throw new \Exception("Database error:\n".$error[2]." \n in query:\n{$query}");
 		}
 		return $this->pixie->db->result_driver('PDO', $cursor);
 	}

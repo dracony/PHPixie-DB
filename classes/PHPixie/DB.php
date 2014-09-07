@@ -123,7 +123,4 @@ class DB {
 		$driver = "\\PHPixie\\DB\\".$driver."\\Result";
 		return new $driver($cursor);
 	}
-	
-	
-		
 }

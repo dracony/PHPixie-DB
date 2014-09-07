@@ -1,6 +1,8 @@
 <?php
 
 namespace PHPixie\DB\Mysql;
+use PHPixie\DB\Query;
+use PHPixie\DB\Result;
 
 /**
  * Mysqli Database Implementation
@@ -11,7 +13,7 @@ class Connection extends \PHPixie\DB\Connection
 	
 	/**
 	 * Mysqli database connection object
-	 * @var mysqli
+	 * @var \mysqli
 	 * @link http://php.net/manual/en/class.mysqli.php
 	 */
 	public $conn;
@@ -22,12 +24,14 @@ class Connection extends \PHPixie\DB\Connection
 	 */
 	public $db_type = 'mysql';
 
-	/**
-	 * Initializes database connection
-	 *
-	 * @param string $config Name of the connection to initialize
-	 * @return void
-	 */
+    /**
+     * Initializes database connection
+     *
+     * @param \PHPixie\Pixie $pixie
+     * @param string $config Name of the connection to initialize
+     * @throws \Exception
+     * @return \PHPixie\DB\Mysql\Connection
+     */
 	public function __construct($pixie, $config)
 	{
 		parent::__construct($pixie, $config);
@@ -41,13 +45,14 @@ class Connection extends \PHPixie\DB\Connection
 		$this->conn->set_charset("utf8");
 	}
 
-	/**
-	 * Gets column names for the specified table
-	 *
-	 * @param string $table Name of the table to get columns from
-	 * @return array Array of column names
-	 * @throw \Exception if table doesn't exist
-	 */
+    /**
+     * Gets column names for the specified table
+     *
+     * @param string $table Name of the table to get columns from
+     * @throws \Exception
+     * @return array Array of column names
+     * @throw \Exception if table doesn't exist
+     */
 	public function list_columns($table)
 	{
 		$columns = array();
@@ -68,7 +73,7 @@ class Connection extends \PHPixie\DB\Connection
 	 * Builds a new Query implementation
 	 *
 	 * @param string $type Query type. Available types: select,update,insert,delete,count
-	 * @return Query_Mysql_Driver  Returns a Mysqli implementation of a Query.
+	 * @return Query  Returns a Mysqli implementation of a Query.
 	 * @see Query_Database
 	 */
 	public function query($type)
@@ -91,7 +96,7 @@ class Connection extends \PHPixie\DB\Connection
 	 *
 	 * @param string   $query  A prepared statement query
 	 * @param array     $params Parameters for the query
-	 * @return Result_Mysql_Driver    Mysqli implementation of a database result
+	 * @return Result    Mysqli implementation of a database result
 	 * @throws \Exception If the query resulted in an error
 	 * @see Database_Result
 	 */
