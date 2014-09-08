@@ -5,6 +5,7 @@ namespace PHPixie\DB\PDO;
 /**
  * PDO implementation of the database Query
  * @package Database
+ *
  */
 class Query extends \PHPixie\DB\Query
 {
@@ -21,14 +22,14 @@ class Query extends \PHPixie\DB\Query
 	 */
 	protected $_quote;
 
-	/**
-	 * Creates a new query object, checks which driver we are using and set the character used for quoting
-	 *
-	 * @param DB $db   Database connection
-	 * @param string $type Query type. Available types: select, update, insert, delete, count
-	 * @return void
-	 * @see \PHPixie\DB\Query::__construct()
-	 */
+    /**
+     * Creates a new query object, checks which driver we are using and set the character used for quoting
+     *
+     * @param \PHPixie\DB\PDO\Connection $db Database connection
+     * @param string $type Query type. Available types: select, update, insert, delete, count
+     * @return \PHPixie\DB\PDO\Query
+     * @see \PHPixie\DB\Query::__construct()
+     */
 	public function __construct($db, $type)
 	{
 		parent::__construct($db, $type);
@@ -113,14 +114,15 @@ class Query extends \PHPixie\DB\Query
 		return "({$query[0]}) ";
 	}
 
-	/**
-	 * Gets the SQL for a table to select from
-	 *
-	 * @param string|\PHPixie\DB\Expression|\PHPixie\DB\Query|array $table Table representation
-	 * @param array  &$params Reference to parameters array
-	 * @param string &alias   Alias for this table
-	 * @return string  Table SQL
-	 */
+    /**
+     * Gets the SQL for a table to select from
+     *
+     * @param string|\PHPixie\DB\Expression|\PHPixie\DB\Query|array $table Table representation
+     * @param array &$params Reference to parameters array
+     * @throws \Exception
+     * @internal param $string &alias   Alias for this table
+     * @return string  Table SQL
+     */
 	public function escape_table($table, &$params)
 	{
 		$alias = null;
@@ -150,11 +152,12 @@ class Query extends \PHPixie\DB\Query
 		throw new \Exception("Parameter type ".get_class($table)." cannot be used as a table");
 	}
 
-	/**
-	 * Builds a query and fills the $params array with parameter values
-	 *
-	 * @return array     An array with a prepared query string and an array of parameters
-	 */
+    /**
+     * Builds a query and fills the $params array with parameter values
+     *
+     * @throws \Exception
+     * @return array     An array with a prepared query string and an array of parameters
+     */
 	public function query()
 	{
 
@@ -444,9 +447,8 @@ class Query extends \PHPixie\DB\Query
 		{
 			return "( ".$conds.")";
 		}
-		return $conds;
 
-		throw new \Exception("Cannot parse condition:\n".var_export($p, true));
+		return $conds;
 	}
 
 }

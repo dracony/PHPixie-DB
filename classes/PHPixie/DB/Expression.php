@@ -25,7 +25,6 @@ class Expression
 	 * </code>
 	 *
 	 * @param mixed $value Part of query that should not be escaped
-	 * @return Expression_Database
 	 */
 	public function __construct($value)
 	{
