@@ -289,7 +289,11 @@ class Query extends \PHPixie\DB\Query
 			{
 				if ($this->_db_type != 'sqlite')
 				{
-					$query .= "DELETE {$this->last_alias()}.* FROM {$this->escape_table($this->_table, $params)} ";
+                    if (!empty($this->_joins)) {
+					   $query .= "DELETE {$this->last_alias()}.* FROM {$this->escape_table($this->_table, $params)} ";
+                    }else {
+                        $query .= "DELETE FROM {$this->escape_table($this->_table, $params)} ";
+                    }
 				}
 				else
 				{
