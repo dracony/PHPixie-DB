@@ -128,7 +128,22 @@ class PDO_Query_Test extends PHPUnit_Framework_TestCase
 			->where('id', 1)
 			->query();
 
-		$this->assertEquals("DELETE fairies.* FROM `fairies` WHERE `fairies`.`id` = ?  ", current($query));
+		$this->assertEquals("DELETE FROM `fairies` WHERE `fairies`.`id` = ?  ", current($query));
+	}
+    
+	/**
+	 * @covers Query_PDO_Driver::query
+	 */
+	public function testQueryExpressionParams()
+	{
+		$query = $this->object
+			->type('select')
+			->table('fairies')
+			->where('id', 'MATCHES', new \PHPixie\DB\Expression("AGAINST ?", array('pixie')))
+			->query();
+
+		$this->assertEquals("SELECT * FROM `fairies` WHERE `fairies`.`id` MATCHES AGAINST ?  ", $query[0]);
+        $this->assertEquals(array('pixie'), $query[1]);
 	}
 
 	/**

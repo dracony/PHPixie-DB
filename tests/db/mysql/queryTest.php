@@ -127,7 +127,7 @@ class Query_Mysql_DriverTest extends PHPUnit_Framework_TestCase
 			->where('id', 1)
 			->query();
 
-		$this->assertEquals("DELETE fairies.* FROM `fairies` WHERE `fairies`.`id` = ?  ", current($query));
+		$this->assertEquals("DELETE FROM `fairies` WHERE `fairies`.`id` = ?  ", current($query));
 	}
 
 	/**
