@@ -93,7 +93,7 @@ abstract class Connection
 	 */
 	public function expr($value, $params = array())
 	{
-		return $this->phpixie->db->expr($value, $params);
+		return $this->pixie->db->expr($value, $params);
 	}
 
 }
