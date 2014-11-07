@@ -15,6 +15,13 @@ class Expression
 	 * @var mixed
 	 */
 	public $value;
+    
+    /**
+	 * Parameters to add to the query
+	 * @var array
+	 */
+	public $params;
+    
 
 	/**
 	 * Marks a part of query as a database specific expression,
@@ -26,9 +33,10 @@ class Expression
 	 *
 	 * @param mixed $value Part of query that should not be escaped
 	 */
-	public function __construct($value)
+	public function __construct($value, $params = array())
 	{
 		$this->value = $value;
+        $this->params = $params;
 	}
 
 }

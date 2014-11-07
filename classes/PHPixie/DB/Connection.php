@@ -88,11 +88,12 @@ abstract class Connection
 	 * Values wrapped inside Expression are not escaped in queries
 	 *
 	 * @param mixed $value Value to be wrapped
+     * @param array $params Escaped parameters
 	 * @return \PHPixie\Db\Expression  Raw value that will not be escaped during query building
 	 */
-	public function expr($value)
+	public function expr($value, $params = array())
 	{
-		return $this->phpixie->db->expr($value);
+		return $this->phpixie->db->expr($value, $params);
 	}
 
 }

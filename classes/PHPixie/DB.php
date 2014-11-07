@@ -92,11 +92,12 @@ class DB {
 	 * Returns an Expression representation of the value.
 	 * Values wrapped inside Expression are not escaped in queries
 	 *
-	 * @param mixed $value Value to be wrapped
+	 * @param mixed $value  Value to be wrapped
+     * @param array $params Escaped parameters
 	 * @return \PHPixie\Db\Expression  Raw value that will not be escaped during query building
 	 */
-	public function expr($value) {
-		return new \PHPixie\DB\Expression($value);
+	public function expr($value, $params = array()) {
+		return new \PHPixie\DB\Expression($value, $params);
 	}
 	
 	/*

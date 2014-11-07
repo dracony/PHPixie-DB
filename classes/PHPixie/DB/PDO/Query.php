@@ -90,6 +90,10 @@ class Query extends \PHPixie\DB\Query
 	{
 		if ($val instanceof \PHPixie\DB\Expression)
 		{
+            foreach($val->params as $p)
+            {
+                $params[] = $p;
+            }
 			return $val->value;
 		}
 		if ($val instanceof \PHPixie\DB\Query)
